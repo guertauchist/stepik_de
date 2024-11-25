@@ -1,34 +1,43 @@
-CREATE TABLE name 
+CREATE TABLE surname_table 
 (
-    name VARCHAR,
+    person_id SERIAL NOT NULL,
+    surname VARCHAR,
+    PRIMARY KEY (person_id)
 );
 
-CREATE TABLE surname 
-(
-    surname	VARCHAR,
-);
-
-CREATE TABLE patronym 
-(
-    patronym VARCHAR,
-);
- 
-
-
-INSERT INTO name (name) VALUES
-    ('Иван'),
-    ('Петр'),
-    ('Сидор');
-
-INSERT INTO surname (surname) VALUES
+INSERT INTO surname_table (surname) VALUES
     ('Иванов'),
     ('Петров'),
     ('Сидоров');
 
-INSERT INTO patronym (patronym) VALUES
+CREATE TABLE name_table
+(   
+    person_id SERIAL NOT NULL,
+    name VARCHAR,
+    FOREIGN KEY (person_id) REFERENCES surname_table(person_id)
+);
+
+INSERT INTO name_table (name) VALUES
+    ('Иван'),
+    ('Петр'),
+    ('Сидор');
+
+CREATE TABLE patronym_table
+(
+    person_id SERIAL NOT NULL,
+    patronym VARCHAR,
+    FOREIGN KEY (person_id) REFERENCES surname_table(person_id)
+);
+ 
+INSERT INTO patronym_table (patronym) VALUES
     ('Иванович'),
     ('Петрович'),
     ('Сидорорович');
 
 
-SELECT 
+SELECT surname, name, patronym 
+FROM surname_table sn
+JOIN name_table n
+ON  sn.person_id = n.person_id
+JOIN patronym_table p
+ON n.person_id = p.person_id;
